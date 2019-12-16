@@ -46,24 +46,38 @@ class App extends Component {
 	// Toggles Comple
 	markComplete = (id) => {
 		let completed;
-		firebase
-			.database()
-			.ref('todos/' + id + '/completed')
-			.once('value')
-			.then((snap) => {
-				completed = snap.val();
-			});
+		let title;
+		let snapid;
+		firebase.database().ref('todos/' + id).once('value', (snap) => {
+			completed = snap.val().completed;
+			title = snap.val().title;
+			snapid = snap.val().id;
+		});
 
-		console.log(completed);
-
-		if (completed == 'true') {
-			firebase.database().ref('todos/' + id).update({
-				completed : false,
-			});
+		if (completed == true) {
+			firebase
+				.database()
+				.ref('todos/' + id)
+				.update({
+					completed : false,
+					title     : title,
+					id        : snapid,
+				})
+				.catch((e) => {
+					console.log(e);
+				});
 		} else {
-			firebase.database().ref('todos/' + id).update({
-				completed : true,
-			});
+			firebase
+				.database()
+				.ref('todos/' + id)
+				.update({
+					completed : true,
+					title     : title,
+					id        : snapid,
+				})
+				.catch((e) => {
+					console.log(e);
+				});
 		}
 		// this.setState({
 		// 	todos : this.state.todos.map((todo) => {
