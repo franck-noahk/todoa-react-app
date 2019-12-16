@@ -90,11 +90,24 @@ class App extends Component {
 	};
 	//deltes by copying the existing group of data minus the id given.
 	delete = (id) => {
-		this.setState({
-			todos : [
-				...this.state.todos.filter((todo) => todo.id != id),
-			],
-		});
+		let rootRef = firebase.database();
+		let todosRef = rootRef.ref().child('todos');
+
+		firebase.database().ref('todos/' + id).remove();
+
+		// this.setState({
+		// 	todos : [
+		// 		...this.state.todos.filter((todo) => todo.id != id),
+		// 	],
+		// });
+	};
+
+	addTask = (title, id, completed) => {
+		let rootRef = firebase.database();
+		let todosRef = rootRef.ref().child('todos');
+
+		
+
 	};
 
 	render() {
