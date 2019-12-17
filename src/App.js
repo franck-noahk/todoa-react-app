@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Todos from './components/Todos';
+import CreateTodo from './components/CreateTodo';
 import * as firebase from 'firebase';
 
 class App extends Component {
@@ -88,6 +89,7 @@ class App extends Component {
 		// 	}),
 		// });
 	};
+
 	//deltes by copying the existing group of data minus the id given.
 	delete = (id) => {
 		let rootRef = firebase.database();
@@ -102,18 +104,23 @@ class App extends Component {
 		// });
 	};
 
-	addTask = (title, id, completed) => {
+	addTask = (title, completed) => {
 		let rootRef = firebase.database();
 		let todosRef = rootRef.ref().child('todos');
 
-		
-
+		let newObject = todosRef.push();
+		newObject.set({
+			title     : title,
+			completed : completed,
+			id        : newObject.key,
+		});
 	};
 
 	render() {
 		return (
 			<div className='App'>
 				<h1>App</h1>
+				<CreateTodo addTask={this.addTask} />
 				<Todos
 					todos={this.state.todos}
 					markComplete={this.markComplete}
